@@ -25,8 +25,10 @@
 <meta property="og:image" content="http://example.com/images/pwn/kali3.png">
 <meta property="og:image" content="http://example.com/images/pwn/4.png">
 <meta property="og:image" content="http://example.com/images/pwn/5.png">
+<meta property="og:image" content="http://example.com/images/pwn/kali4.png">
+<meta property="og:image" content="http://example.com/images/pwn/6.png">
 <meta property="article:published_time" content="2023-06-21T08:01:05.000Z">
-<meta property="article:modified_time" content="2023-06-29T10:21:21.491Z">
+<meta property="article:modified_time" content="2023-06-29T10:49:26.698Z">
 <meta property="article:author" content="Khx_404">
 <meta property="article:tag" content="pwn">
 <meta property="article:tag" content="ctfshow">
@@ -212,7 +214,7 @@
       <!-- 百度字体平台:http://fontstore.baidu.com/static/editor/index.html -->
       <i class="icon-statistics"></i>
       <span class="post-meta-item-text"> 字数统计:</span>
-      <span class="post-count">307字</span>
+      <span class="post-count">607字</span>
     </span>
   </span>
 
@@ -221,7 +223,7 @@
     <span class="post-meta-item-icon">
       <i class="icon-book icon"></i>
       <span class="post-meta-item-text"> 阅读时长≈</span>
-      <span class="post-count">1分</span>
+      <span class="post-count">2分</span>
     </span>
   </span>
 </div>
@@ -239,8 +241,15 @@
 <h3 id="1-段表从984开始"><a href="#1-段表从984开始" class="headerlink" title="1.段表从984开始"></a>1.段表从984开始</h3><h3 id="2-段表描述是40字节"><a href="#2-段表描述是40字节" class="headerlink" title="2.段表描述是40字节"></a>2.段表描述是40字节</h3><h3 id="3-一共有15个段"><a href="#3-一共有15个段" class="headerlink" title="3.一共有15个段"></a>3.一共有15个段</h3><h3 id="4-从984开始也就是段表长度是600-（一共15段每个段40个字节，15x60）-从984开始，到-1584结束。-从984开始每40个字节一组一共分成15组，14的那个段就是段表描述的最后那个字节"><a href="#4-从984开始也就是段表长度是600-（一共15段每个段40个字节，15x60）-从984开始，到-1584结束。-从984开始每40个字节一组一共分成15组，14的那个段就是段表描述的最后那个字节" class="headerlink" title="4.从984开始也就是段表长度是600  （一共15段每个段40个字节，15x60） 从984开始，到 1584结束。 从984开始每40个字节一组一共分成15组，14的那个段就是段表描述的最后那个字节"></a>4.从984开始也就是段表长度是600  （一共15段每个段40个字节，15x60） 从984开始，到 1584结束。 从984开始每40个字节一组一共分成15组，14的那个段就是段表描述的最后那个字节</h3><h1 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h1><h2 id="静态链接：多个目标文件链接在一起生成的可执行文件的过程"><a href="#静态链接：多个目标文件链接在一起生成的可执行文件的过程" class="headerlink" title="静态链接：多个目标文件链接在一起生成的可执行文件的过程"></a>静态链接：多个目标文件链接在一起生成的可执行文件的过程</h2><p>  gcc -c a.c b.c -fno-stack-protector -m32</p>
 <h2 id="空间与地址分配"><a href="#空间与地址分配" class="headerlink" title="空间与地址分配"></a>空间与地址分配</h2><pre><code> 使用ld命令
  ld -m elf_i386 a.o b.o -e main -o ab  // 做一个手工的链接
+
+ 操作系统对elf文件默认虚拟地址分配地址是08048000h
 </code></pre>
-<p>待更。。。。</p>
+<p> <img src="/images/pwn/kali4.png"> </p>
+<p>—————————   分割线  ——————–</p>
+<h2 id="进程的VMA区域"><a href="#进程的VMA区域" class="headerlink" title="进程的VMA区域"></a>进程的VMA区域</h2><p>1.代码VAM.权限只读，可执行，有映像文件<br>2.数据VMA,权限可读写。可执行；有影像文件<br>3.堆VMA，权限可读写，可执行；没有映像文件，匿名，可以向上扩展<br>4.栈VMA，权限可读写，不可以执行，，无映像文件，匿名，可向下扩展</p>
+<h2 id="进程栈初始化"><a href="#进程栈初始化" class="headerlink" title="进程栈初始化"></a>进程栈初始化</h2><p>1.刚启动的时候，需要得到进程的启动参数和系统的环境变量，这些数据得保存到一个地方供进城使用<br>2.保存的这个地方要和进程绑定，因为不同的进程有不同的启动参数，也就是需要一个进程的私有空间来存放<br>3.这个存放启动参数和操作系统环境变量的进程私有空间就是栈空间</p>
+<h2 id="栈空间"><a href="#栈空间" class="headerlink" title="栈空间"></a>栈空间</h2><p>1.栈是一片内存空间，共程序使用<br>2.栈的内存地址增长方向为向下增长，即先用高地址，依次向下填充<br>3.最后一个地址。就是栈顶。内存地址最低的地址</p>
+<p> <img src="/images/pwn/6.png"><br>待更。。。。</p>
 
     
 
