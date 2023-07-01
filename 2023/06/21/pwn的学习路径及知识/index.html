@@ -27,8 +27,12 @@
 <meta property="og:image" content="http://example.com/images/pwn/5.png">
 <meta property="og:image" content="http://example.com/images/pwn/kali4.png">
 <meta property="og:image" content="http://example.com/images/pwn/6.png">
+<meta property="og:image" content="http://example.com/images/pwn/ctfshow.png">
+<meta property="og:image" content="http://example.com/images/pwn/2023-07-01-13-07-55.png">
+<meta property="og:image" content="http://example.com/images/pwn/7.png">
+<meta property="og:image" content="http://example.com/images/pwn/2023-07-01-13-07-55.png">
 <meta property="article:published_time" content="2023-06-21T08:01:05.000Z">
-<meta property="article:modified_time" content="2023-06-29T10:49:26.698Z">
+<meta property="article:modified_time" content="2023-07-01T05:39:48.596Z">
 <meta property="article:author" content="Khx_404">
 <meta property="article:tag" content="pwn">
 <meta property="article:tag" content="ctfshow">
@@ -214,7 +218,7 @@
       <!-- 百度字体平台:http://fontstore.baidu.com/static/editor/index.html -->
       <i class="icon-statistics"></i>
       <span class="post-meta-item-text"> 字数统计:</span>
-      <span class="post-count">607字</span>
+      <span class="post-count">836字</span>
     </span>
   </span>
 
@@ -223,7 +227,7 @@
     <span class="post-meta-item-icon">
       <i class="icon-book icon"></i>
       <span class="post-meta-item-text"> 阅读时长≈</span>
-      <span class="post-count">2分</span>
+      <span class="post-count">3分</span>
     </span>
   </span>
 </div>
@@ -249,7 +253,20 @@
 <h2 id="进程的VMA区域"><a href="#进程的VMA区域" class="headerlink" title="进程的VMA区域"></a>进程的VMA区域</h2><p>1.代码VAM.权限只读，可执行，有映像文件<br>2.数据VMA,权限可读写。可执行；有影像文件<br>3.堆VMA，权限可读写，可执行；没有映像文件，匿名，可以向上扩展<br>4.栈VMA，权限可读写，不可以执行，，无映像文件，匿名，可向下扩展</p>
 <h2 id="进程栈初始化"><a href="#进程栈初始化" class="headerlink" title="进程栈初始化"></a>进程栈初始化</h2><p>1.刚启动的时候，需要得到进程的启动参数和系统的环境变量，这些数据得保存到一个地方供进城使用<br>2.保存的这个地方要和进程绑定，因为不同的进程有不同的启动参数，也就是需要一个进程的私有空间来存放<br>3.这个存放启动参数和操作系统环境变量的进程私有空间就是栈空间</p>
 <h2 id="栈空间"><a href="#栈空间" class="headerlink" title="栈空间"></a>栈空间</h2><p>1.栈是一片内存空间，共程序使用<br>2.栈的内存地址增长方向为向下增长，即先用高地址，依次向下填充<br>3.最后一个地址。就是栈顶。内存地址最低的地址</p>
-<p> <img src="/images/pwn/6.png"><br>待更。。。。</p>
+<p> <img src="/images/pwn/6.png"> </p>
+<p>—————————-  分界线  ————————————————–</p>
+<h2 id="我们来看-ctfshow-pwn入门的第一题"><a href="#我们来看-ctfshow-pwn入门的第一题" class="headerlink" title="我们来看 ctfshow pwn入门的第一题"></a>我们来看 ctfshow pwn入门的第一题</h2><p> <img src="/images/pwn/ctfshow.png"> </p>
+<p> 根据题目提示我们可以直接用nc直接连接<br> <img src="/images/pwn/2023-07-01-13-07-55.png"><br>可以直接看到flag<br>ctfshow{72e06f77-344b-4ff3-b343-716a8aa06372}<br>但是我们现在想一下怎么写出我们的第一个exp<br>写exp首先要导入pwn的模块  </p>
+<p>pwntool的模块介绍可以参考<a target="_blank" rel="noopener" href="http://docs.pwntools.com/en/stable/context.html">pwnlib</a></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">我们可以这样</span><br><span class="line">from pwn import * </span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">context.log_level=<span class="string">&#x27;debug&#x27;</span></span><br></pre></td></tr></table></figure>
+<p>context.log_level这里就是<br> <img src="/images/pwn/7.png"> </p>
+<p>然后我们就可以</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">io = process(<span class="string">&#x27;./pwn&#x27;</span>)  <span class="comment"># 这里是在本地环境下，如果是远程不是这样</span></span><br><span class="line">io = remote(<span class="string">&#x27;pwn.challenge.ctf.show&#x27;</span>,28131) <span class="comment">#这样就是远程</span></span><br><span class="line"></span><br><span class="line">注意，前面的，io只是根据个人喜好编写可以是各种，不一定非要是跟我一样</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(io.interactive())  然后我们就可以建立连接了</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p> <img src="/images/pwn/2023-07-01-13-07-55.png"><br> 可以看到flag了  这道题就解决了<br>正在学习pwn  如果有什么错误希望麻烦大家指出来</p>
+<p> 待更。。。。</p>
 
     
 
